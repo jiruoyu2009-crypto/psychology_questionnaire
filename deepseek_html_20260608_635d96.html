@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青少年人格与认知表现测评</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Segoe UI', 'Microsoft YaHei', Roboto, Arial, sans-serif;
+    background: #d9e2e8;  /* 更深一点的暖灰蓝背景 */
+    margin: 0;
+    padding: 20px;
+    color: #1f2f38;
+}
+.container{
+    max-width: 950px;
+    margin: 30px auto;
+    background: #fefef7;
+    padding: 32px 40px;
+    border-radius: 32px;
+    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    border: 1px solid #cddbdf;
+}
+h1, h2, h3 {
+    color: #2c4b55;
+    font-weight: 650;
+    letter-spacing: -0.2px;
+}
+h1 {
+    border-left: 5px solid #56878b;
+    padding-left: 20px;
+    font-size: 1.9rem;
+}
+button {
+    background: #56878b;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: 0.2s;
+    margin-top: 20px;
+    margin-right: 12px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+button:hover {
+    background: #3f6b6f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+.question {
+    background: #f6f5ef;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    border-radius: 24px;
+    border: 1px solid #d4dfe2;
+    transition: 0.1s;
+}
+.scale {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: center;
+}
+.scale label {
+    background: #e8eae3;
+    padding: 6px 14px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.1s;
+    color: #2c4b55;
+}
+.scale label:hover {
+    background: #cfdad6;
+}
+input[type="radio"] {
+    margin-right: 5px;
+    transform: scale(1.05);
+    accent-color: #56878b;
+}
+.hidden {
+    display: none;
+}
+.progress {
+    width: 100%;
+    background: #cfdbdf;
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 28px 0;
+}
+.progress-bar {
+    height: 14px;
+    width: 0%;
+    background: #56878b;
+    transition: width 0.25s ease;
+    border-radius: 30px;
+}
+.result-box {
+    background: #eef3ef;
+    padding: 24px 28px;
+    border-radius: 28px;
+    margin: 20px 0;
+    line-height: 1.55;
+    border-left: 6px solid #56878b;
+    color: #1f2f38;
+    font-weight: 500;
+}
+.timer {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #a5714c;
+    background: #fef0e6;
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 40px;
+    margin-top: 15px;
+    border: 1px solid #e0cdbc;
+}
+input[type=text] {
+    width: 280px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 60px;
+    border: 1px solid #bbc8cd;
+    background: #fffdf9;
+    transition: 0.2s;
+}
+input[type=text]:focus {
+    border-color: #56878b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(86,135,139,0.3);
+}
+input[type=range] {
+    width: 100%;
+    margin: 8px 0;
+    accent-color: #56878b;
+}
+hr {
+    margin: 24px 0;
+    border: 0;
+    height: 2px;
+    background: #cfddd8;
+}
+.flex-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+small {
+    color: #5b737c;
+}
+.debrief-box {
+    background: #fff2e2;
+    padding: 20px 24px;
+    border-radius: 24px;
+    border-left: 6px solid #a5714c;
+    margin: 20px 0;
+}
+.feedback-rating {
+    background: #f6f5ef;
+    border-radius: 24px;
+    padding: 10px 0 5px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="welcome">
+    <h1>青少年人格与认知表现测评</h1>
+    <p>感谢你参与本次研究。所有数据仅用于学术研究，匿名处理。</p>
+    <button onclick="showSection('consent')">开始测评</button>
+</div>
+
+<div class="container hidden" id="consent">
+    <h2>知情同意书</h2>
+    <p>感谢你参与本次研究。在开始前，请仔细阅读以下内容：</p>
+    <ul>
+        <li>本次测评包含人格问卷、自我评价、逻辑推理任务，大约需要12-15分钟。</li>
+        <li>你的所有回答将被严格保密，仅用于学术分析。</li>
+        <li>你可以随时退出实验而不需要承担任何后果。</li>
+        <li>实验结束后会提供完整的事后说明。</li>
+    </ul>
+    <p>点击下方按钮代表你自愿同意参与本实验。</p>
+    <button onclick="showSection('questionnaire')">我同意并继续</button>
+</div>
+
+<div class="container hidden" id="questionnaire">
+    <h2>人格特质测评</h2>
+    <p>请根据你的真实情况，使用1-7分进行评价（1=完全不同意，7=完全同意）。</p>
+    <form id="personalityForm"></form>
+    <button onclick="submitQuestionnaire()">提交测评并生成分析</button>
+</div>
+
+<div class="container hidden" id="analysis">
+    <h2>正在分析人格特征...</h2>
+    <p id="analysisText">正在加载人格维度模型，请稍候...</p>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p><small>基于大五人格及坚持性常模进行比对</small></p>
+</div>
+
+<div class="container hidden" id="feedback">
+    <h2>人格分析报告</h2>
+    <div class="result-box" id="feedbackBox">
+        <p id="feedbackText"></p>
+    </div>
+    <!-- 结果反馈评价区域 (控制组隐藏) -->
+    <div id="ratingSection" class="feedback-rating">
+        <h3>结果反馈评价</h3>
+        <div class="question">
+            <p>我认为该结果能够较准确地描述我的人格特征。</p>
+            <input type="range" min="1" max="7" value="4" id="accuracyRating">
+            <div><span>1(完全不符)</span> &nbsp;&nbsp;—&nbsp;&nbsp; <span>7(非常准确)</span></div>
+        </div>
+        <div class="question">
+            <p>我认为该人格测评结果具有可信度。</p>
+            <input type="range" min="1" max="7" value="4" id="credibilityRating">
+            <div><span>1(很低)</span> &nbsp;&nbsp;—&nbsp;&nbsp; <span>7(很高)</span></div>
+        </div>
+    </div>
+    <button onclick="startSelfConcept()">📋 继续填写自我认知问卷</button>
+</div>
+
+<!-- 自我认知问卷 (调整至谜题之前) -->
+<div class="container hidden" id="selfconcept">
+    <h2>自我认知问卷</h2>
+    <p>请根据你对自己的真实看法，评价以下陈述 (1=完全不同意，7=完全同意)。</p>
+    <div class="question">
+        <p><strong>1.</strong> 我认为自己是一个能够坚持完成任务的人。</p>
+        <input type="range" min="1" max="7" value="4" id="self1">
+    </div>
+    <div class="question">
+        <p><strong>2.</strong> 即使遇到失败，我通常也会继续尝试。</p>
+        <input type="range" min="1" max="7" value="4" id="self2">
+    </div>
+    <div class="question">
+        <p><strong>3.</strong> 我认为自己在面对压力时较容易保持冷静。</p>
+        <input type="range" min="1" max="7" value="4" id="self3">
+    </div>
+    <div class="question">
+        <p><strong>4.</strong> 我通常对未来结果持积极态度。</p>
+        <input type="range" min="1" max="7" value="4" id="self4">
+    </div>
+    <div class="question">
+        <p><strong>5.</strong> 当任务变困难时，我容易失去动力。</p>
+        <input type="range" min="1" max="7" value="4" id="self5">
+    </div>
+    <button onclick="saveSelfAndStartPuzzle()">继续进入认知任务</button>
+</div>
+
+<div class="container hidden" id="puzzle">
+    <h2>认知坚持任务 (逻辑谜题)</h2>
+    <p>请尝试解决以下推理题。系统将自动记录你的坚持时间、尝试次数，并可以随时选择“放弃”。</p>
+    <hr>
+    <h3>五位数密码谜题</h3>
+    <p>一个五位数密码符合所有下列条件：</p>
+    <ol style="line-height:1.5">
+        <li>五个数字互不相同（0-9之间）。</li>
+        <li>五个数字之和为 27。</li>
+        <li>第一位数字是偶数。</li>
+        <li>最后一位数字比第一位数字大 3。</li>
+        <li>中间三位数字的乘积等于 72。</li>
+        <li>整个数字可以被 9 整除。</li>
+    </ol>
+    <p><strong>请填写你认为正确的五位数字密码：</strong></p>
+    <input type="text" id="puzzleAnswer" placeholder="例如: 38160" autocomplete="off">
+    <div class="flex-buttons">
+        <button onclick="attemptPuzzle()">提交答案</button>
+        <button onclick="quitPuzzle()" style="background:#a5714c;">我想放弃</button>
+    </div>
+    <p id="attemptsDisplay" style="font-weight:500; margin-top:16px;"></p>
+    <p class="timer" id="timerDisplay">已坚持时间：0 秒</p>
+    <p><small>提示: 可以通过逻辑推导，若认为无解可尝试“不存在”作为答案。</small></p>
+</div>
+
+<div class="container hidden" id="debrief">
+    <h2>实验说明</h2>
+    <div class="debrief-box">
+        <p>🙏 感谢你认真参与本次研究！</p>
+        <p>💡 <strong>本研究真实目的：</strong>探究当青少年被贴上积极或消极人格标签后，他们是否会在将来按照这个标签调整自己的自我认知与行为。你在“人格分析反馈”环节收到的结果实际上是<strong>随机分配</strong>的，并非基于你的真实问卷得分。这是为了科学地研究标签效应，请不必担心。</p>
+        <p>🧾 你的行为数据（坚持时间、尝试次数、自我评价）已匿名记录，仅用于统计分析。</p>
+        <p>🎯 再次感谢你为青少年心理学研究做出的贡献！</p>
+    </div>
+    <hr>
+    <p><strong>实验数据已自动保存至浏览器控制台（研究者可见）</strong> — 你可以关闭此页面。</p>
+    <button onclick="window.location.reload();">重新开始实验（新被试）</button>
+</div>
+
+<script>
+// ---------- 全局变量 ----------
+let assignedGroup = "";        // "积极标签组", "消极标签组", "控制组"
+let attempts = 0;
+let startTime = 0;
+let timerInterval = null;
+let puzzleQuitFlag = false;
+let originalPersistenceLevel = "";
+let selfDataSaved = false;      // 标记自我认知问卷已完成
+
+// 15个人格问卷题目
+const questions = [
+    "即使任务变得重复，我通常也能保持专注。",
+    "我通常能够较快适应新的环境。",
+    "我倾向于提前规划事情。",
+    "即使遇到困难，我也倾向于完成任务。",
+    "我通常对未来保持积极态度。",
+    "我喜欢与他人合作完成任务。",
+    "当进展缓慢时，我容易感到沮丧。",
+    "遭遇失败后，我恢复得比较快。",
+    "我经常怀疑自己能否完成困难任务。",
+    "我通常能够长期保持动力。",
+    "我喜欢尝试新的挑战。",
+    "我倾向于避免特别困难的任务。",
+    "面对压力时，我通常能够保持冷静。",
+    "即使成功不确定，我也会继续尝试。",
+    "我更喜欢稳定而不是冒险。"
+];
+
+// 动态生成问卷
+const formContainer = document.getElementById("personalityForm");
+questions.forEach((q, idx) => {
+    let div = document.createElement("div");
+    div.className = "question";
+    let radiosHtml = "";
+    for (let val = 1; val <= 7; val++) {
+        radiosHtml += `<label><input type="radio" name="q${idx}" value="${val}" required> ${val}</label>`;
+    }
+    div.innerHTML = `<p>${idx+1}. ${q}</p><div class="scale">${radiosHtml}</div>`;
+    formContainer.appendChild(div);
+});
+
+function showSection(id) {
+    document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function calculateOriginalPersistence() {
+    let sum = 0;
+    let validCount = 0;
+    for (let i = 0; i < 5; i++) {
+        const radios = document.getElementsByName(`q${i}`);
+        let selectedVal = null;
+        for (let r of radios) {
+            if (r.checked) {
+                selectedVal = parseInt(r.value);
+                break;
+            }
+        }
+        if (selectedVal !== null) {
+            sum += selectedVal;
+            validCount++;
+        }
+    }
+    if (validCount < 5) return "中等坚持性";
+    const avg = sum / 5;
+    if (avg >= 5.5) return "高坚持性";
+    else if (avg <= 3.5) return "低坚持性";
+    else return "中等坚持性";
+}
+
+function isQuestionnaireComplete() {
+    for (let i = 0; i < questions.length; i++) {
+        const radios = document.getElementsByName(`q${i}`);
+        let checkedExists = false;
+        for (let r of radios) {
+            if (r.checked) {
+                checkedExists = true;
+                break;
+            }
+        }
+        if (!checkedExists) return false;
+    }
+    return true;
+}
+
+function submitQuestionnaire() {
+    if (!isQuestionnaireComplete()) {
+        alert("请完整填写所有人格测评题目（每道题选1-7分）后再提交。");
+        return;
+    }
+    originalPersistenceLevel = calculateOriginalPersistence();
+    console.log(`[调节变量] 原始坚持性水平: ${originalPersistenceLevel}`);
+    
+    showSection('analysis');
+    let progress = 0;
+    const bar = document.getElementById("progressBar");
+    const analysisText = document.getElementById("analysisText");
+    const interval = setInterval(() => {
+        progress += 8;
+        if (progress > 100) progress = 100;
+        bar.style.width = progress + "%";
+        if (progress === 28) analysisText.innerText = "正在与青少年人格常模数据库比对...";
+        if (progress === 58) analysisText.innerText = "分析坚持性、心理韧性及情绪因子...";
+        if (progress === 82) analysisText.innerText = "根据人格动态特征生成个性化反馈...";
+        if (progress >= 100) {
+            clearInterval(interval);
+            generateFeedbackWithPersistence();
+        }
+    }, 280);
+}
+
+function generateFeedbackWithPersistence() {
+    const rand = Math.random();
+    if (rand < 0.33) {
+        assignedGroup = "积极标签组";
+        let extraNote = "";
+        if (originalPersistenceLevel === "低坚持性") {
+            extraNote = " <span style='background:#e0f0ea; padding:2px 8px; border-radius:20px;'>🔍 原始坚持性较低者受高坚持性标签影响更显著</span>";
+        } else if (originalPersistenceLevel === "中等坚持性") {
+            extraNote = " <span style='background:#fdf0cf; padding:2px 8px; border-radius:20px;'>📊 原本坚持性处于中等范围，标签效应可能较弱。</span>";
+        } else {
+            extraNote = " <span style='background:#d9f0e0; padding:2px 8px; border-radius:20px;'>🌟 本身就具备较高毅力，标签进一步强化自我认知。</span>";
+        }
+        document.getElementById("feedbackText").innerHTML = `
+            <strong>✨ 积极人格反馈</strong><br><br>
+            你的结果显示，相较于同龄人，你表现出较高水平的坚持性、心理韧性与乐观倾向。<br>
+            拥有此类人格特征的人，通常能够在任务变得困难或令人挫败时持续努力，并在逆境中保持积极心态。<br><br>
+            <strong>“坚持性与心理韧性得分”高于约79%的同龄参与者。</strong><br>
+            ${extraNote}
+        `;
+        const ratingSec = document.getElementById("ratingSection");
+        if (ratingSec) ratingSec.style.display = "block";
+    } 
+    else if (rand < 0.66) {
+        assignedGroup = "消极标签组";
+        let extraNote = "";
+        if (originalPersistenceLevel === "高坚持性") {
+            extraNote = " <span style='background:#ffe0e0; padding:2px 8px; border-radius:20px;'>⚠️ 负向标签损害效应：原本高坚持个体受到低坚持标签影响可能更明显。</span>";
+        } else if (originalPersistenceLevel === "中等坚持性") {
+            extraNote = " <span style='background:#fdf0cf; padding:2px 8px; border-radius:20px;'>📉 中等坚持性个体对负面标签响应程度有待探索。</span>";
+        } else {
+            extraNote = " <span style='background:#e0eefa; padding:2px 8px; border-radius:20px;'>🧠 原本坚持性偏低，负面标签可能产生自我验证效应。</span>";
+        }
+        document.getElementById("feedbackText").innerHTML = `
+            <strong>🌿 发展反馈</strong><br><br>
+            你的结果显示，当面对高认知负荷任务时，你较容易失去动力，并在压力情境下出现自我怀疑。<br>
+            拥有此类人格特征的人，有时会在困难任务中较早放弃，且较难持续保持积极状态。<br><br>
+            <strong>“坚持性与心理韧性得分”低于同龄人平均水平。</strong><br>
+            ${extraNote}
+        `;
+        const ratingSec = document.getElementById("ratingSection");
+        if (ratingSec) ratingSec.style.display = "block";
+    } 
+    else {
+        assignedGroup = "控制组";
+        document.getElementById("feedbackText").innerHTML = `
+            <strong>📋 测评结果记录</strong><br><br>
+            你的作答已成功保存。感谢你的参与，接下来你将完成自我认知问卷和认知任务。<br>
+            （本组不提供具体人格分析反馈，以保持实验中立性）
+        `;
+        const ratingSec = document.getElementById("ratingSection");
+        if (ratingSec) ratingSec.style.display = "none";
+    }
+    
+    console.log(`[实验分组] ${assignedGroup} | 原始坚持性: ${originalPersistenceLevel}`);
+    showSection('feedback');
+}
+
+// 从反馈页进入自我认知问卷（调整后位于谜题前）
+function startSelfConcept() {
+    // 保存反馈评价数据（如果需要可以记录，但核心是自我认知）
+    const accuracy = document.getElementById("accuracyRating")?.value || null;
+    const credibility = document.getElementById("credibilityRating")?.value || null;
+    if (assignedGroup !== "控制组") {
+        console.log(`[反馈评价] 准确性:${accuracy}, 可信度:${credibility}`);
+    }
+    showSection('selfconcept');
+}
+
+// 保存自我认知问卷结果，然后进入谜题任务
+function saveSelfAndStartPuzzle() {
+    // 收集自我认知量表值并存入localStorage
+    const self1 = document.getElementById("self1").value;
+    const self2 = document.getElementById("self2").value;
+    const self3 = document.getElementById("self3").value;
+    const self4 = document.getElementById("self4").value;
+    const self5 = document.getElementById("self5").value;
+    
+    localStorage.setItem("self_persistence", self1);
+    localStorage.setItem("self_resilience", self2);
+    localStorage.setItem("self_calm", self3);
+    localStorage.setItem("self_optimism", self4);
+    localStorage.setItem("self_lowmotivation", self5);
+    localStorage.setItem("group", assignedGroup);
+    localStorage.setItem("originalPersistence", originalPersistenceLevel);
+    
+    selfDataSaved = true;
+    // 重置谜题状态，开始认知任务
+    startPuzzle();
+}
+
+function startPuzzle() {
+    attempts = 0;
+    puzzleQuitFlag = false;
+    if (timerInterval) clearInterval(timerInterval);
+    startTime = Date.now();
+    document.getElementById("attemptsDisplay").innerText = "";
+    document.getElementById("puzzleAnswer").value = "";
+    const timerEl = document.getElementById("timerDisplay");
+    timerEl.innerText = "已坚持时间：0 秒";
+    showSection('puzzle');
+    timerInterval = setInterval(() => {
+        if (!document.getElementById("puzzle") || document.getElementById("puzzle").classList.contains("hidden")) {
+            return;
+        }
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const timerDisplaySpan = document.getElementById("timerDisplay");
+        if (timerDisplaySpan) timerDisplaySpan.innerText = `已坚持时间：${elapsed} 秒`;
+    }, 500);
+}
+
+function isValidPassword(pwdStr) {
+    if (!/^\d{5}$/.test(pwdStr)) return false;
+    const digits = pwdStr.split('').map(Number);
+    if (new Set(digits).size !== 5) return false;
+    const sum = digits.reduce((a,b) => a+b, 0);
+    if (sum !== 27) return false;
+    if (digits[0] % 2 !== 0) return false;
+    if (digits[4] !== digits[0] + 3) return false;
+    const middleProd = digits[1] * digits[2] * digits[3];
+    if (middleProd !== 72) return false;
+    if (sum % 9 !== 0) return false;
+    return true;
+}
+
+function attemptPuzzle() {
+    const answerField = document.getElementById("puzzleAnswer");
+    const userAnswer = answerField.value.trim();
+    if (userAnswer === "") {
+        alert("请输入一个五位数字或输入'不存在'。");
+        return;
+    }
+    attempts++;
+    document.getElementById("attemptsDisplay").innerHTML = `当前尝试次数：${attempts}`;
+    
+    let isCorrect = false;
+    if (userAnswer.toLowerCase() === "不存在") {
+        isCorrect = false;
+        alert("答案不正确，请继续尝试。提示：可以通过数学推导找到符合条件的五位数。");
+        return;
+    }
+    if (isValidPassword(userAnswer)) {
+        isCorrect = true;
+    }
+    if (isCorrect) {
+        clearInterval(timerInterval);
+        alert("✅ 恭喜！密码正确！你成功解决了逻辑谜题，将进入实验说明。");
+        const endTime = Date.now();
+        const persistenceTime = Math.floor((endTime - startTime) / 1000);
+        localStorage.setItem("attempts", attempts);
+        localStorage.setItem("time", persistenceTime);
+        localStorage.setItem("puzzleSolved", "true");
+        finishExperimentAfterPuzzle();
+    } else {
+        alert("❌ 答案不正确，请继续推理。 提示：注意互不相同、和为27及中间三位乘积72等条件。");
+    }
+}
+
+function quitPuzzle() {
+    if (puzzleQuitFlag) return;
+    puzzleQuitFlag = true;
+    clearInterval(timerInterval);
+    const endTime = Date.now();
+    const persistenceTime = Math.floor((endTime - startTime) / 1000);
+    localStorage.setItem("attempts", attempts);
+    localStorage.setItem("time", persistenceTime);
+    localStorage.setItem("quitEarly", "true");
+    finishExperimentAfterPuzzle();
+}
+
+function finishExperimentAfterPuzzle() {
+    // 获取已存储的自我认知数据及分组
+    const group = localStorage.getItem("group") || assignedGroup;
+    const attemptsData = localStorage.getItem("attempts") || attempts;
+    const timeData = localStorage.getItem("time") || "未完成";
+    const originalPersistence = localStorage.getItem("originalPersistence") || originalPersistenceLevel;
+    const self1 = localStorage.getItem("self_persistence") || "未填";
+    const self2 = localStorage.getItem("self_resilience") || "未填";
+    const self3 = localStorage.getItem("self_calm") || "未填";
+    const self4 = localStorage.getItem("self_optimism") || "未填";
+    const self5 = localStorage.getItem("self_lowmotivation") || "未填";
+    
+    console.log("===== 实验完整数据 =====");
+    console.log("实验分组:", group);
+    console.log("原始坚持性(调节变量):", originalPersistence);
+    console.log("谜题尝试次数:", attemptsData);
+    console.log("坚持时间(秒):", timeData);
+    console.log("自我评价(1-7):", `坚持性认同=${self1}, 韧性=${self2}, 冷静=${self3}, 乐观=${self4}, 易失动力=${self5}`);
+    console.log("=======================");
+    
+    showSection('debrief');
+}
+
+// 兼容旧finishExperiment (由于顺序改变，不需要额外调用)
+function finishExperiment() {
+    // 此函数不再触发，保留占位避免报错
+    finishExperimentAfterPuzzle();
+}
+</script>
+</body>
+</html>
