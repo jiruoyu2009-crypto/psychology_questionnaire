@@ -306,6 +306,8 @@ let timerInterval = null;
 let puzzleQuitFlag = false;
 let originalPersistenceLevel = "";
 let selfDataSaved = false;      // 标记自我认知问卷已完成
+let sessionStartAt = Date.now();
+let uploadAttempted = false;
 
 // 15个人格问卷题目
 const questions = [
@@ -383,11 +385,52 @@ function isQuestionnaireComplete() {
     return true;
 }
 
+function collectQuestionnaireAnswers() {
+    const answers = {};
+    for (let i = 0; i < questions.length; i++) {
+        const radios = document.getElementsByName(`q${i}`);
+        const selected = Array.from(radios).find(r => r.checked);
+        answers[`q${i}`] = selected ? Number(selected.value) : null;
+    }
+    return answers;
+}
+
+function getSelfRatings() {
+    return {
+        self1: Number(document.getElementById("self1")?.value || 0),
+        self2: Number(document.getElementById("self2")?.value || 0),
+        self3: Number(document.getElementById("self3")?.value || 0),
+        self4: Number(document.getElementById("self4")?.value || 0),
+        self5: Number(document.getElementById("self5")?.value || 0)
+    };
+}
+
+async function uploadExperimentData(payload) {
+    if (uploadAttempted) return { ok: true, skipped: true };
+    uploadAttempted = true;
+
+    try {
+        const response = await fetch('/api/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+        console.log('Cloudflare upload result:', result);
+        return result;
+    } catch (error) {
+        console.error('Cloudflare upload failed:', error);
+        return { ok: false, error: String(error) };
+    }
+}
+
 function submitQuestionnaire() {
     if (!isQuestionnaireComplete()) {
         alert("请完整填写所有人格测评题目（每道题选1-7分）后再提交。");
         return;
     }
+    sessionStartAt = Date.now();
+    localStorage.setItem("sessionStartAt", String(sessionStartAt));
     originalPersistenceLevel = calculateOriginalPersistence();
     console.log(`[调节变量] 原始坚持性水平: ${originalPersistenceLevel}`);
     
@@ -468,9 +511,10 @@ function generateFeedbackWithPersistence() {
 
 // 从反馈页进入自我认知问卷（调整后位于谜题前）
 function startSelfConcept() {
-    // 保存反馈评价数据（如果需要可以记录，但核心是自我认知）
     const accuracy = document.getElementById("accuracyRating")?.value || null;
     const credibility = document.getElementById("credibilityRating")?.value || null;
+    localStorage.setItem("feedback_accuracy", String(accuracy));
+    localStorage.setItem("feedback_credibility", String(credibility));
     if (assignedGroup !== "控制组") {
         console.log(`[反馈评价] 准确性:${accuracy}, 可信度:${credibility}`);
     }
@@ -493,6 +537,7 @@ function saveSelfAndStartPuzzle() {
     localStorage.setItem("self_lowmotivation", self5);
     localStorage.setItem("group", assignedGroup);
     localStorage.setItem("originalPersistence", originalPersistenceLevel);
+    localStorage.setItem("questionnaire_answers", JSON.stringify(collectQuestionnaireAnswers()));
     
     selfDataSaved = true;
     // 重置谜题状态，开始认知任务
@@ -533,7 +578,7 @@ function isValidPassword(pwdStr) {
     return true;
 }
 
-function attemptPuzzle() {
+async function attemptPuzzle() {
     const answerField = document.getElementById("puzzleAnswer");
     const userAnswer = answerField.value.trim();
     if (userAnswer === "") {
@@ -557,54 +602,80 @@ function attemptPuzzle() {
         alert("✅ 恭喜！密码正确！你成功解决了逻辑谜题，将进入实验说明。");
         const endTime = Date.now();
         const persistenceTime = Math.floor((endTime - startTime) / 1000);
-        localStorage.setItem("attempts", attempts);
-        localStorage.setItem("time", persistenceTime);
+        localStorage.setItem("attempts", String(attempts));
+        localStorage.setItem("time", String(persistenceTime));
         localStorage.setItem("puzzleSolved", "true");
-        finishExperimentAfterPuzzle();
+        localStorage.setItem("puzzleAnswer", userAnswer);
+        await finishExperimentAfterPuzzle('solved', userAnswer, persistenceTime);
     } else {
         alert("❌ 答案不正确，请继续推理。 提示：注意互不相同、和为27及中间三位乘积72等条件。");
     }
 }
 
-function quitPuzzle() {
+async function quitPuzzle() {
     if (puzzleQuitFlag) return;
     puzzleQuitFlag = true;
     clearInterval(timerInterval);
     const endTime = Date.now();
     const persistenceTime = Math.floor((endTime - startTime) / 1000);
-    localStorage.setItem("attempts", attempts);
-    localStorage.setItem("time", persistenceTime);
+    const userAnswer = document.getElementById("puzzleAnswer")?.value.trim() || "";
+    localStorage.setItem("attempts", String(attempts));
+    localStorage.setItem("time", String(persistenceTime));
     localStorage.setItem("quitEarly", "true");
-    finishExperimentAfterPuzzle();
+    localStorage.setItem("puzzleAnswer", userAnswer);
+    await finishExperimentAfterPuzzle('quit', userAnswer, persistenceTime);
 }
 
-function finishExperimentAfterPuzzle() {
+async function finishExperimentAfterPuzzle(outcome = 'unknown', puzzleAnswer = '', persistenceTime = 0) {
     // 获取已存储的自我认知数据及分组
     const group = localStorage.getItem("group") || assignedGroup;
-    const attemptsData = localStorage.getItem("attempts") || attempts;
-    const timeData = localStorage.getItem("time") || "未完成";
+    const attemptsData = Number(localStorage.getItem("attempts") || attempts || 0);
+    const timeData = Number(localStorage.getItem("time") || persistenceTime || 0);
     const originalPersistence = localStorage.getItem("originalPersistence") || originalPersistenceLevel;
-    const self1 = localStorage.getItem("self_persistence") || "未填";
-    const self2 = localStorage.getItem("self_resilience") || "未填";
-    const self3 = localStorage.getItem("self_calm") || "未填";
-    const self4 = localStorage.getItem("self_optimism") || "未填";
-    const self5 = localStorage.getItem("self_lowmotivation") || "未填";
-    
+    const selfRatings = getSelfRatings();
+    const questionnaireAnswers = JSON.parse(localStorage.getItem("questionnaire_answers") || 'null') || collectQuestionnaireAnswers();
+    const feedbackAccuracy = localStorage.getItem("feedback_accuracy") || null;
+    const feedbackCredibility = localStorage.getItem("feedback_credibility") || null;
+    const totalDurationSec = Math.floor((Date.now() - Number(localStorage.getItem("sessionStartAt") || sessionStartAt || Date.now())) / 1000);
+
+    const submissionPayload = {
+        submittedAt: new Date().toISOString(),
+        outcome,
+        group,
+        originalPersistence,
+        questionnaireAnswers,
+        feedbackRatings: {
+            accuracy: feedbackAccuracy,
+            credibility: feedbackCredibility
+        },
+        selfRatings,
+        puzzleAnswer,
+        attempts: attemptsData,
+        persistenceTimeSec: timeData,
+        totalDurationSec,
+        quitEarly: outcome === 'quit'
+    };
+
+    localStorage.setItem("submissionPayload", JSON.stringify(submissionPayload));
+
     console.log("===== 实验完整数据 =====");
     console.log("实验分组:", group);
     console.log("原始坚持性(调节变量):", originalPersistence);
     console.log("谜题尝试次数:", attemptsData);
     console.log("坚持时间(秒):", timeData);
-    console.log("自我评价(1-7):", `坚持性认同=${self1}, 韧性=${self2}, 冷静=${self3}, 乐观=${self4}, 易失动力=${self5}`);
+    console.log("答题总时长(秒):", totalDurationSec);
+    console.log("数学题答案:", puzzleAnswer);
+    console.log("自我评价(1-7):", `坚持性认同=${selfRatings.self1}, 韧性=${selfRatings.self2}, 冷静=${selfRatings.self3}, 乐观=${selfRatings.self4}, 易失动力=${selfRatings.self5}`);
     console.log("=======================");
-    
+
+    await uploadExperimentData(submissionPayload);
     showSection('debrief');
 }
 
 // 兼容旧finishExperiment (由于顺序改变，不需要额外调用)
-function finishExperiment() {
+async function finishExperiment() {
     // 此函数不再触发，保留占位避免报错
-    finishExperimentAfterPuzzle();
+    await finishExperimentAfterPuzzle();
 }
 </script>
 </body>
