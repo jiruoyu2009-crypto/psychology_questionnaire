@@ -9,168 +9,187 @@
 * {
     box-sizing: border-box;
 }
-body{
-    font-family: 'Segoe UI', 'Microsoft YaHei', Roboto, Arial, sans-serif;
-    background: #d9e2e8;  /* 更深一点的暖灰蓝背景 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    background: #fcfcfc;  /* 极简微灰白背景 */
     margin: 0;
-    padding: 20px;
-    color: #1f2f38;
+    padding: 24px;
+    color: #111111; /* 接近纯黑的文字颜色 */
 }
-.container{
-    max-width: 950px;
-    margin: 30px auto;
-    background: #fefef7;
-    padding: 32px 40px;
-    border-radius: 32px;
-    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
-    transition: all 0.2s;
-    border: 1px solid #cddbdf;
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 6px; /* 小圆角 SaaS 风格 */
+    border: 1px solid #e2e8f0; /* 浅灰色边框 */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 h1, h2, h3 {
-    color: #2c4b55;
-    font-weight: 650;
-    letter-spacing: -0.2px;
+    color: #111111;
+    font-weight: 600;
+    margin-top: 0;
 }
 h1 {
-    border-left: 5px solid #56878b;
-    padding-left: 20px;
-    font-size: 1.9rem;
+    font-size: 1.5rem;
+    border-left: 4px solid #0051cc; /* 经典 SaaS 蓝作强调色 */
+    padding-left: 12px;
+    margin-bottom: 24px;
+}
+h2 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+}
+h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
 }
 button {
-    background: #56878b;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 50px;
+    background: #0051cc; /* 统一蓝色按钮 */
+    color: #ffffff;
+    border: 1px solid #0045b3;
+    padding: 8px 16px;
+    border-radius: 4px; /* 小圆角 */
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: 0.2s;
-    margin-top: 20px;
-    margin-right: 12px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.15s ease;
+    margin-top: 16px;
+    margin-right: 8px;
 }
 button:hover {
-    background: #3f6b6f;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    background: #0045b3;
+}
+/* 放弃/次要按钮也保持统一蓝色，移除原本的彩色 */
+button.btn-secondary {
+    background: #0051cc;
+    border: 1px solid #0045b3;
+}
+button.btn-secondary:hover {
+    background: #0045b3;
 }
 .question {
-    background: #f6f5ef;
-    padding: 16px 20px;
-    margin-bottom: 18px;
-    border-radius: 24px;
-    border: 1px solid #d4dfe2;
-    transition: 0.1s;
+    background: #f8fafc; /* 微灰底色块 */
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border: 1px solid #edf2f7;
 }
 .scale {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
     margin-top: 12px;
     align-items: center;
 }
 .scale label {
-    background: #e8eae3;
-    padding: 6px 14px;
-    border-radius: 40px;
+    background: #ffffff;
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.1s;
-    color: #2c4b55;
+    transition: all 0.15s ease;
+    color: #111111;
 }
 .scale label:hover {
-    background: #cfdad6;
+    background: #f3f4f6;
+    border-color: #9ca3af;
 }
 input[type="radio"] {
-    margin-right: 5px;
-    transform: scale(1.05);
-    accent-color: #56878b;
+    margin-right: 6px;
+    accent-color: #0051cc;
 }
 .hidden {
     display: none;
 }
 .progress {
     width: 100%;
-    background: #cfdbdf;
-    border-radius: 30px;
+    background: #e2e8f0;
+    border-radius: 2px;
     overflow: hidden;
-    margin: 28px 0;
+    margin: 24px 0;
 }
 .progress-bar {
-    height: 14px;
+    height: 6px;
     width: 0%;
-    background: #56878b;
+    background: #0051cc;
     transition: width 0.25s ease;
-    border-radius: 30px;
 }
 .result-box {
-    background: #eef3ef;
-    padding: 24px 28px;
-    border-radius: 28px;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 4px;
     margin: 20px 0;
-    line-height: 1.55;
-    border-left: 6px solid #56878b;
-    color: #1f2f38;
-    font-weight: 500;
+    line-height: 1.6;
+    border-left: 4px solid #0051cc;
+    color: #111111;
 }
 .timer {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #a5714c;
-    background: #fef0e6;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111111;
+    background: #f1f5f9;
     display: inline-block;
-    padding: 6px 20px;
-    border-radius: 40px;
-    margin-top: 15px;
-    border: 1px solid #e0cdbc;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-top: 16px;
+    border: 1px solid #e2e8f0;
 }
 input[type=text] {
-    width: 280px;
-    padding: 12px 18px;
-    font-size: 1rem;
-    border-radius: 60px;
-    border: 1px solid #bbc8cd;
-    background: #fffdf9;
-    transition: 0.2s;
+    width: 100%;
+    max-width: 320px;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #111111;
+    transition: border-color 0.15s ease;
 }
 input[type=text]:focus {
-    border-color: #56878b;
+    border-color: #0051cc;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(86,135,139,0.3);
 }
 input[type=range] {
     width: 100%;
-    margin: 8px 0;
-    accent-color: #56878b;
+    margin: 12px 0;
+    accent-color: #0051cc;
 }
 hr {
     margin: 24px 0;
     border: 0;
-    height: 2px;
-    background: #cfddd8;
+    height: 1px;
+    background: #e2e8f0;
 }
 .flex-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
 }
 small {
-    color: #5b737c;
+    color: #6b7280;
 }
 .debrief-box {
-    background: #fff2e2;
-    padding: 20px 24px;
-    border-radius: 24px;
-    border-left: 6px solid #a5714c;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 4px;
+    border-left: 4px solid #0051cc;
     margin: 20px 0;
+    line-height: 1.6;
 }
 .feedback-rating {
-    background: #f6f5ef;
-    border-radius: 24px;
-    padding: 10px 0 5px 0;
+    background: transparent;
+    padding: 0;
+}
+ol, ul {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+li {
+    margin-bottom: 8px;
 }
 </style>
 </head>
@@ -216,7 +235,6 @@ small {
     <div class="result-box" id="feedbackBox">
         <p id="feedbackText"></p>
     </div>
-    <!-- 结果反馈评价区域 (控制组隐藏) -->
     <div id="ratingSection" class="feedback-rating">
         <h3>结果反馈评价</h3>
         <div class="question">
@@ -233,7 +251,6 @@ small {
     <button onclick="startSelfConcept()">📋 继续填写自我认知问卷</button>
 </div>
 
-<!-- 自我认知问卷 (调整至谜题之前) -->
 <div class="container hidden" id="selfconcept">
     <h2>自我认知问卷</h2>
     <p>请根据你对自己的真实看法，评价以下陈述 (1=完全不同意，7=完全同意)。</p>
@@ -264,21 +281,19 @@ small {
     <h2>认知坚持任务 (逻辑谜题)</h2>
     <p>请尝试解决以下推理题。系统将自动记录你的坚持时间、尝试次数，并可以随时选择“放弃”。</p>
     <hr>
-    <h3>五位数密码谜题</h3>
-    <p>一个五位数密码符合所有下列条件：</p>
-    <ol style="line-height:1.5">
-        <li>五个数字互不相同（0-9之间）。</li>
-        <li>五个数字之和为 27。</li>
-        <li>第一位数字是偶数。</li>
-        <li>最后一位数字比第一位数字大 3。</li>
-        <li>中间三位数字的乘积等于 72。</li>
-        <li>整个数字可以被 9 整除。</li>
+    <h3>六位数密码谜题</h3>
+    <p>一个六位数密码符合所有下列条件：</p>
+    <ol style="line-height:1.6">
+        <li>最左边的数是最右边的数的一半。</li>
+        <li>中间四位数相乘为 0。</li>
+        <li>六位数全部数字相加得 23。</li>
+        <li>中间的两位数构成的两位数减去最左边的两位数的差的 13倍 是最右边的两位数。</li>
     </ol>
-    <p><strong>请填写你认为正确的五位数字密码：</strong></p>
-    <input type="text" id="puzzleAnswer" placeholder="例如: 38160" autocomplete="off">
+    <p><strong>请填写你认为正确的六位数字密码：</strong></p>
+    <input type="text" id="puzzleAnswer" placeholder="例如: 123456" autocomplete="off">
     <div class="flex-buttons">
         <button onclick="attemptPuzzle()">提交答案</button>
-        <button onclick="quitPuzzle()" style="background:#a5714c;">我想放弃</button>
+        <button onclick="quitPuzzle()" class="btn-secondary">我想放弃</button>
     </div>
     <p id="attemptsDisplay" style="font-weight:500; margin-top:16px;"></p>
     <p class="timer" id="timerDisplay">已坚持时间：0 秒</p>
@@ -306,7 +321,7 @@ let startTime = 0;
 let timerInterval = null;
 let puzzleQuitFlag = false;
 let originalPersistenceLevel = "";
-let selfDataSaved = false;      // 标记自我认知问卷已完成
+let selfDataSaved = false;      
 let sessionStartAt = Date.now();
 let uploadAttempted = false;
 
@@ -459,11 +474,11 @@ function generateFeedbackWithPersistence() {
         assignedGroup = "积极标签组";
         let extraNote = "";
         if (originalPersistenceLevel === "低坚持性") {
-            extraNote = " <span style='background:#e0f0ea; padding:2px 8px; border-radius:20px;'>🔍 原始坚持性较低者受高坚持性标签影响更显著</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>🔍 原始坚持性较低者受高坚持性标签影响更显著</span>";
         } else if (originalPersistenceLevel === "中等坚持性") {
-            extraNote = " <span style='background:#fdf0cf; padding:2px 8px; border-radius:20px;'>📊 原本坚持性处于中等范围，标签效应可能较弱。</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>📊 原本坚持性处于中等范围，标签效应可能较弱。</span>";
         } else {
-            extraNote = " <span style='background:#d9f0e0; padding:2px 8px; border-radius:20px;'>🌟 本身就具备较高毅力，标签进一步强化自我认知。</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>🌟 本身就具备较高毅力，标签进一步强化自我认知。</span>";
         }
         document.getElementById("feedbackText").innerHTML = `
             <strong>✨ 积极人格反馈</strong><br><br>
@@ -479,11 +494,11 @@ function generateFeedbackWithPersistence() {
         assignedGroup = "消极标签组";
         let extraNote = "";
         if (originalPersistenceLevel === "高坚持性") {
-            extraNote = " <span style='background:#ffe0e0; padding:2px 8px; border-radius:20px;'>⚠️ 负向标签损害效应：原本高坚持个体受到低坚持标签影响可能更明显。</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>⚠️ 负向标签损害效应：原本高坚持个体受到低坚持标签影响可能更明显。</span>";
         } else if (originalPersistenceLevel === "中等坚持性") {
-            extraNote = " <span style='background:#fdf0cf; padding:2px 8px; border-radius:20px;'>📉 中等坚持性个体对负面标签响应程度有待探索。</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>📉 中等坚持性个体对负面标签响应程度有待探索。</span>";
         } else {
-            extraNote = " <span style='background:#e0eefa; padding:2px 8px; border-radius:20px;'>🧠 原本坚持性偏低，负面标签可能产生自我验证效应。</span>";
+            extraNote = " <span style='background:#f3f4f6; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0;'>🧠 原本坚持性偏低，负面标签可能产生自我验证效应。</span>";
         }
         document.getElementById("feedbackText").innerHTML = `
             <strong>🌿 发展反馈</strong><br><br>
@@ -510,7 +525,6 @@ function generateFeedbackWithPersistence() {
     showSection('feedback');
 }
 
-// 从反馈页进入自我认知问卷（调整后位于谜题前）
 function startSelfConcept() {
     const accuracy = document.getElementById("accuracyRating")?.value || null;
     const credibility = document.getElementById("credibilityRating")?.value || null;
@@ -522,9 +536,7 @@ function startSelfConcept() {
     showSection('selfconcept');
 }
 
-// 保存自我认知问卷结果，然后进入谜题任务
 function saveSelfAndStartPuzzle() {
-    // 收集自我认知量表值并存入localStorage
     const self1 = document.getElementById("self1").value;
     const self2 = document.getElementById("self2").value;
     const self3 = document.getElementById("self3").value;
@@ -541,7 +553,6 @@ function saveSelfAndStartPuzzle() {
     localStorage.setItem("questionnaire_answers", JSON.stringify(collectQuestionnaireAnswers()));
     
     selfDataSaved = true;
-    // 重置谜题状态，开始认知任务
     startPuzzle();
 }
 
@@ -565,25 +576,16 @@ function startPuzzle() {
     }, 500);
 }
 
+// 重写后的判断模块：直接校验是否等于 384026
 function isValidPassword(pwdStr) {
-    if (!/^\d{5}$/.test(pwdStr)) return false;
-    const digits = pwdStr.split('').map(Number);
-    if (new Set(digits).size !== 5) return false;
-    const sum = digits.reduce((a,b) => a+b, 0);
-    if (sum !== 27) return false;
-    if (digits[0] % 2 !== 0) return false;
-    if (digits[4] !== digits[0] + 3) return false;
-    const middleProd = digits[1] * digits[2] * digits[3];
-    if (middleProd !== 72) return false;
-    if (sum % 9 !== 0) return false;
-    return true;
+    return pwdStr === "384026";
 }
 
 async function attemptPuzzle() {
     const answerField = document.getElementById("puzzleAnswer");
     const userAnswer = answerField.value.trim();
     if (userAnswer === "") {
-        alert("请输入一个五位数字或输入'不存在'。");
+        alert("请输入一个六位数字或输入'不存在'。");
         return;
     }
     attempts++;
@@ -591,9 +593,8 @@ async function attemptPuzzle() {
     
     let isCorrect = false;
     if (userAnswer.toLowerCase() === "不存在") {
-        isCorrect = true;
-        // alert("答案不正确，请继续尝试。提示：可以通过数学推导找到符合条件的五位数。");
-        return;
+        isCorrect = false;
+        alert("答案不正确，请继续尝试。提示：可以通过数学推导找到符合条件的五位数。");        return;
     }
     if (isValidPassword(userAnswer)) {
         isCorrect = true;
@@ -609,7 +610,7 @@ async function attemptPuzzle() {
         localStorage.setItem("puzzleAnswer", userAnswer);
         await finishExperimentAfterPuzzle('solved', userAnswer, persistenceTime);
     } else {
-        alert("❌ 答案不正确，请继续推理。 提示：注意互不相同、和为27及中间三位乘积72等条件。");
+        alert("❌ 答案不正确，请继续推理。 提示：注意数字之间的倍数与运算关系。");
     }
 }
 
@@ -628,7 +629,6 @@ async function quitPuzzle() {
 }
 
 async function finishExperimentAfterPuzzle(outcome = 'unknown', puzzleAnswer = '', persistenceTime = 0) {
-    // 获取已存储的自我认知数据及分组
     const group = localStorage.getItem("group") || assignedGroup;
     const attemptsData = Number(localStorage.getItem("attempts") || attempts || 0);
     const timeData = Number(localStorage.getItem("time") || persistenceTime || 0);
@@ -673,9 +673,7 @@ async function finishExperimentAfterPuzzle(outcome = 'unknown', puzzleAnswer = '
     showSection('debrief');
 }
 
-// 兼容旧finishExperiment (由于顺序改变，不需要额外调用)
 async function finishExperiment() {
-    // 此函数不再触发，保留占位避免报错
     await finishExperimentAfterPuzzle();
 }
 </script>
